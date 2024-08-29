@@ -354,9 +354,9 @@ def _format_chat_completion_stream_output(
 
 
 async def _async_yield_from(client: "ClientSession", response: "ClientResponse") -> AsyncIterable[bytes]:
-    async for byte_payload in response.content:
-        yield byte_payload.strip()
-    await client.close()
+    async with client:
+        async for byte_payload in response.content:
+            yield byte_payload.strip()
 
 
 # "TGI servers" are servers running with the `text-generation-inference` backend.
